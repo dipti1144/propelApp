@@ -1,0 +1,7 @@
+{
+  "name": "propelApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
