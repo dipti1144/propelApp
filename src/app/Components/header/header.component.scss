@@ -1,0 +1,11 @@
+ion-toolbar {
+    display: flex;
+    justify-content: center; // Center the title horizontally
+    align-items: center;     // Center the title vertically
+  }
+  
+
+  .title-centered {
+    margin: 0 auto; // Center the title in the middle
+    text-align: center; // Center the text itself
+  }

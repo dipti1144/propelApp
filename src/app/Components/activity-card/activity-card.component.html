@@ -1,0 +1,24 @@
+<ion-card class="new-border slideIn" *ngIf="loading">
+  <ion-row *ngIf="loading && status === undefined">
+    <ion-col size="2" col-1 class="icon-position">
+      <ion-spinner name="bubbles" class="font-30"></ion-spinner>
+    </ion-col>
+    <ion-col size="10" col-11>
+      <p class="loading">Downloading {{module}}..</p>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="loading && status!== undefined">
+    <ion-col size="2" col-1 class="icon-position">
+      <ion-icon name="checkmark-circle" class="font-30 color-green"></ion-icon>
+    </ion-col>
+    <ion-col size="10" *ngIf="status" col-11>
+      <ion-row>
+        <ion-col col-12>
+          <p class="success">
+            <span class="large-font">{{count}}</span> {{module}} saved to Mobile DB.
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ion-card>

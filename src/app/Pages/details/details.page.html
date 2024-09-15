@@ -1,0 +1,162 @@
+<app-header [title]=" poNumber "></app-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ ItemDetail.ItemNumber }}</ion-card-title>
+      <ion-card-subtitle>{{ ItemDetail.ItemDesc }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <p>Qty Order: {{ ItemDetail.QtyOrdered }} {{ ItemDetail.ItemUom }}</p>
+        </ion-item>
+        <ion-item>
+          <p>
+            Qty Remaining: {{ ItemDetail.QtyRemaining }} {{ ItemDetail.ItemUom
+            }}
+          </p>
+        </ion-item>
+        <ion-item>
+          <p>
+            Quantity Received: {{ ItemDetail.QtyOrdered -
+            ItemDetail.QtyRemaining }} {{ ItemDetail.ItemUom }}
+          </p>
+        </ion-item>
+        <ion-item>
+          <p>Shipment #{{ ItemDetail.PoShipmentNumber }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+
+    <ion-list>
+      <ion-row>
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>Qty Rec:</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item>
+              <ion-input type="number" placeholder="QTY"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2">
+            <ion-label>{{uomCode}} </ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+
+      <ion-row *ngIf="ItemDetail.DestinationType==='Inventory'">
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>SubInv:</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item>
+              <ion-input
+                type="text"
+                [(ngModel)]="subInvCode"
+                placeholder="Select SubInv"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon *ngIf="subInvCode" name="pencil"></ion-icon>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+
+      <ion-row *ngIf="ItemDetail.DestinationType==='Inventory'">
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>Locator:</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item>
+              <ion-input
+                type="text"
+                [(ngModel)]="locatorCode"
+                placeholder="Select Locator"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon *ngIf="locatorCode" name="pencil"></ion-icon>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+
+      <ion-row *ngIf="ItemDetail.IsLotControlled==='True'">
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>Lot</ion-label>
+          </ion-col>
+          <ion-col size="4" class="ion-text-center">
+            <ion-item>
+              <ion-input readonly="true"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2"> </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+
+      <ion-row *ngIf="ItemDetail.IsSerialControlled==='True'">
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>Serial</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item>
+              <ion-input readonly="true"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2"> </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+
+      <ion-row *ngIf="ItemDetail?.IsRevisionControlled==='True'">
+        <ion-item>
+          <ion-col size="4">
+            <ion-label>Item Rev:</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-item>
+              <ion-input readonly="true"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="2">
+            <ion-label>{{itemRevCode}}</ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-col>
+        </ion-item>
+      </ion-row>
+    </ion-list>
+
+       
+  </ion-card>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block">
+      SUBMIT
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
+

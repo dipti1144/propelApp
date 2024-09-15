@@ -1,0 +1,194 @@
+
+  <app-header [title]="'Activity Screen'"></app-header>
+
+<ion-content>
+  
+    <!-- for network check -->
+  <app-network-status></app-network-status>
+
+  <ion-card class="new-border slideIn" *ngIf="isDisplayResp">
+    <ion-row>
+      <ion-col size="2" class="icon-position">
+        <ion-icon
+          name="checkmark-circle"
+          class="font-30 color-green"
+        ></ion-icon>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row>
+          <ion-col>
+            <p class="success">Login successful [Kiran Logged In]</p>
+            <p class="success">Assigned Responsibilities:</p>
+            <!-- <p class="success" *ngFor="let resp of responsibility">{{resp}}</p> -->
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <!-- second -->
+  <ion-card class="new-border slideIn">
+    <ion-row>
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-icon
+          name="checkmark-circle"
+          class="font-30 color-green"
+        ></ion-icon>
+      </ion-col>
+      <ion-col size="10">
+        <ion-row>
+          <ion-col col-11>
+            <p class="success">Initial Data Download Started...</p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <!-- Queue box -->
+  <ion-card class="new-border slideIn" *ngIf="loadingQueue">
+    <ion-row *ngIf="loadingQueue">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-spinner name="bubbles" class="font-30"></ion-spinner>
+      </ion-col>
+      <ion-col size="10" col-11>
+        <p class="loading">Updating Mobile transactions in the Server</p>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ion-card class="new-border slideIn" *ngIf="queueLoaded">
+    <ion-row *ngIf="queueLoaded">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-icon
+          name="checkmark-circle"
+          class="font-30 color-green"
+        ></ion-icon>
+      </ion-col>
+      <ion-col size="10" *ngIf="queueLoaded" col-11>
+        <ion-row>
+          <ion-col col-11>
+            <p class="success">
+              Transactions are updated successfully in the server...
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <!-- Activity Cards -->
+  <!-- <ion-card class="new-border slideIn" *ngIf="loading">
+    <ion-row *ngIf="loading && status === undefined">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-spinner name="bubbles" class="font-30"></ion-spinner>
+      </ion-col>
+      <ion-col size="10" col-11>
+        <p class="loading">Downloading {{module}}..</p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="loading && status !== undefined">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-icon name="checkmark-circle" class="font-30 color-green"></ion-icon>
+      </ion-col>
+      <ion-col size="10" *ngIf="status" col-11>
+        <ion-row>
+          <ion-col col-12>
+            <p class="success">
+              <span class="large-font">{{count}}</span> {{module}} saved to Mobile DB.
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-card> -->
+
+
+  <!-- <ion-card class="new-border slideIn" *ngFor="let card of activityCards" [ngClass]="{'loading': card.isLoading}">
+    <ion-row *ngIf="card.isLoading && card.status === undefined">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-spinner name="bubbles" class="font-30"></ion-spinner>
+      </ion-col>
+      <ion-col size="10" col-11>
+        <p class="loading">Downloading {{card.module}}...</p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="card.isLoading && card.status !== undefined">
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-icon name="checkmark-circle" class="font-30 color-green"></ion-icon>
+      </ion-col>
+      <ion-col size="10" *ngIf="card.status" col-11>
+        <ion-row>
+          <ion-col col-12>
+            <p class="success">
+              <span class="large-font">{{card.count}}</span> {{card.module}} saved to Mobile DB.
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+</ion-card> -->
+
+<app-activity-card *ngFor="let card of activityCards" [loading]="card.isLoading" [status]="card.status"
+    [module]="card.moduleTxt" [count]="card.count">
+  </app-activity-card>
+
+
+
+  
+
+  <!-- Success Card -->
+  <ion-card class="new-border slideIn" *ngIf="finishedSync || showOfflineData">
+    <ion-row>
+      <ion-col size="2" col-1 class="icon-position">
+        <ion-icon
+          name="checkmark-circle"
+          class="font-30 color-green"
+        ></ion-icon>
+      </ion-col>
+      <ion-col size="10" col-11>
+        <ion-row *ngIf="finishedSync">
+          <ion-col>
+            <p class="success">Finished data loading</p>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="showOfflineData">
+          <ion-col col-12>
+            <p class="success">
+              All Transactional data downloaded successfully.
+            </p>
+          </ion-col>
+          <ion-col col-12>
+            <p class="success">Congratulations! All set to go !</p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <!-- Error Card -->
+  <div *ngIf="!!errorArray && errorArray.length > 0">
+    <ion-card class="new-border slideIn">
+      <ion-row>
+        <ion-col size="2" col-1 class="icon-position">
+          <ion-icon name="close-circle" class="font-30 color-red"></ion-icon>
+        </ion-col>
+        <ion-col size="10" col-11>
+          <ion-row *ngFor="let er of errorArray">
+            <ion-col class="error">{{er.responsibility}}</ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    <ion-row text-center *ngIf="finishedSync === true">
+      <ion-col>
+        <div class="ion-text-center primary-button-holder sticky-button">
+          <ion-button class="primary-button">Sync Again</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  
+  
+</ion-content>

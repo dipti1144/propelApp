@@ -1,0 +1,27 @@
+.card-header-flex {
+    width: 100%;
+    display: flex;
+    flex-direction: row; /* You can switch to row if you want them in a single line */
+    align-items: center; /* Align the title and subtitle to the left */
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .card-content-flex {
+    display: flex;
+    flex-direction: row; /* Adjust to column if needed */
+    justify-content: space-between; /* Distributes content evenly */
+    align-items: center; /* Center items vertically */
+    background-color: rgb(218, 244, 248);
+    padding-top: 5px;
+  }
+
+  .items{
+    color: rgb(0, 0, 0);
+  }
+  .List-card{
+    border: 1px solid blue;
+    margin-top: -100px;
+  }
+  
+  

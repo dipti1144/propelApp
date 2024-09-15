@@ -1,0 +1,35 @@
+<app-header [title]="'Select Organization'"></app-header>
+
+<ion-content [fullscreen]="true">
+
+   <!-- for network check -->
+   <app-network-status></app-network-status>
+
+      <app-search  [items]="displayedData" (searchResults)="onSearchResults($event)"></app-search>
+
+      <ion-list *ngIf="displayedData && displayedData.length > 0" class="org-name-list">
+        <ion-item class="orgItem" *ngFor="let item of displayedData" (click)="selectOrganization(item.InventoryOrgId, item.InventoryOrgCode)">
+          <ion-icon name="checkmark-circle" color="success" *ngIf="isSelected(item.InventoryOrgId)"></ion-icon>
+          <ion-label class="orglabel">
+            <h2>{{ item.InventoryOrgCode }}</h2>
+            <p>{{ item.InventoryOrgName }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      
+      
+
+
+      <!-- No Results Found -->
+
+  <!-- Confirm Button -->
+  <ion-button
+    class="confirm-button"
+    [disabled]="!selectedOrganization"
+    (click)="confirmOrg()"
+    expand="block"
+  >
+    CONFIRM
+  </ion-button>
+      
+    </ion-content>

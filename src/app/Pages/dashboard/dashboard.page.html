@@ -1,0 +1,39 @@
+
+
+
+<app-header [title]="organizationCode ? organizationCode + ' Home' : 'Home'"></app-header>
+
+
+<ion-content [fullscreen]="true">
+
+   <!-- for network check -->
+   <app-network-status></app-network-status>
+    <ion-grid>
+      <ion-row>
+        <ion-col (click)="goodAndReceipt()" >
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Goods Receipt</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <!-- Content for Dashboard tile -->
+               0 completed
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col >
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Transaction History</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <!-- Content for Transaction History tile -->
+              0 completed
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+  
+</ion-content>
