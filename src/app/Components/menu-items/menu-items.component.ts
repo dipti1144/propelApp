@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { ApiServiceService } from 'src/app/Service/api-service.service';
+import { SqliteService } from 'src/app/Service/sqlite.service';
 
 @Component({
   selector: 'app-menu-items',
@@ -15,7 +16,8 @@ export class MenuItemsComponent  {
     private router:Router,
     private menuController: MenuController,
     private apiService:ApiServiceService,
-    private storage:Storage
+    private storage:Storage,
+    private sqliteService:SqliteService
   ) { }
 
   
@@ -33,12 +35,14 @@ export class MenuItemsComponent  {
 
   async logoutAndClear() {
     await this.storage.clear(); // Clear all data from Ionic Storage
-
-    // If using SQLite, ensure you clear that data as well. For example:
-    // this.sqliteService.clearDatabase(); 
-
-    // Navigate to the login page
+    const success = await this.sqliteService.clearDatabase();
+  if (success) {
+    console.log('Database cleared successfully');
     this.router.navigate(['/']);
+  } else {
+    console.log('Failed to clear database');
+  }
+
     await this.menuController.close()
   }
 

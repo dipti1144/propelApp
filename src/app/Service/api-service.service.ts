@@ -65,4 +65,11 @@ export class ApiServiceService {
 getOrganizationApi(url:any): Observable<any[]> {
   return this.http.get<any[]>(url);
 }
+
+
+// POST API 
+
+PostData(url: string, body: any) {
+  return this.http.post(url, body);
+}
 }

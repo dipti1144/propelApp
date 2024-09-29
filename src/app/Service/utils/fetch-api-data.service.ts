@@ -104,7 +104,19 @@ export class FetchApiDataService {
           dataArray = data?.items || data?.Response;
           await this.masterServie.GetInserted(db, dataArray,tableName);
         break; 
-
+       case "getSubinventories":
+        dataArray=data?.items || data?.ActiveSubInventories;
+        await this.masterServie.GetInserted(db,dataArray,tableName)
+        break;
+        case "getLocators":
+         dataArray=data?.items || data?.ActiveLocators;
+         await this.masterServie.GetInserted(db,dataArray,tableName)
+         break;
+         case "getSerial":
+         dataArray=data?.items || data?.ActiveSerials;
+         await this.masterServie.GetInserted(db,dataArray,tableName)
+         break;
+         
       default:
         // console.error(tableName);
         return;

@@ -1,45 +1,60 @@
-<app-header [title]="'Docs Receive'"></app-header>
+  <app-header [title]="'Docs Receive'"></app-header>
 
-<ion-content>
-  <app-scanner 
-  [searchTerm]="searchText" (clearSearchChange)="clearSearch($event)" (sendScanValue)="scan($event)"
-  ></app-scanner>
+  <ion-content>
+     <!-- Refresher Component -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshList($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      refreshingSpinner="crescent"
+      pullingText="Pull to refresh"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          <ion-col size="2">
+            <app-scanner class="make-sticky"   (sendScanValue)="scan($event)"></app-scanner>
+          </ion-col>
+        </ion-col>
+        <ion-col size="10">
+          <app-search
+            [items]="list"
+            (searchResults)="onSearchResults($event)"
+          ></app-search>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-  <app-search 
-    [items]="list" 
-    (searchResults)="onSearchResults($event)" 
-    
-  ></app-search>
+    <ion-card *ngFor="let card of list" (click)="goToItemsPage(card.PoNumber)">
+      <ion-card-header class="card-header-flex">
+        <div>
+          <ion-button>{{ card.PoNumber }}</ion-button>
+        </div>
+        <div>
+          <p>{{ card.PoType }}</p>
+          <p>{{ card.VendorName }}</p>
+        </div>
+        <div class="items">
+          <p>{{ card.count }}</p>
+          <p>Items</p>
+        </div>
+      </ion-card-header>
 
-  <ion-card *ngFor="let card of list" (click)="goToItemsPage(card.PoNumber)">
-    <ion-card-header class="card-header-flex">
-      <div>
-        <ion-button>{{ card.PoNumber }}</ion-button>
-      </div>
-      <div>
-        <p>{{ card.PoType }}</p>
-        <p>{{ card.VendorName }}</p>
-      </div>
-      <div class="items">
-        <p>{{ card.count }}</p>
-        <p>Items</p>
-      </div>
-    </ion-card-header>
+      <ion-card-content class="card-content-flex">
+        <p>{{ card.NeedByDate }}</p>
+        <p>{{ card.Requestor }}</p>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-card-content class="card-content-flex">
-      <p>{{ card.NeedByDate }}</p>
-      <p>{{ card.Requestor }}</p>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-infinite-scroll
-    threshold="10px"
-    position="bottom"
-    (ionInfinite)="loadData($event)"
-  >
-    <ion-infinite-scroll-content 
-      loadingText="Please wait..."
-      loadingSpinner="bubbles"
-    ></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content>
+    <ion-infinite-scroll
+      threshold="10px"
+      position="bottom"
+      (ionInfinite)="loadData($event)"
+    >
+      <ion-infinite-scroll-content
+        loadingText="Please wait..."
+        loadingSpinner="bubbles"
+      ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>

@@ -39,6 +39,14 @@ const routes: Routes = [
     path: 'details',
     loadChildren: () => import('./Pages/details/details.module').then( m => m.DetailsPageModule)
   },
+  {
+    path: 'lot-list',
+    loadChildren: () => import('./Pages/lot-list/lot-list.module').then( m => m.LotListPageModule)
+  },
+  {
+    path: 'transaction-history',
+    loadChildren: () => import('./Pages/transaction-history/transaction-history.module').then( m => m.TransactionHistoryPageModule)
+  },
   
 ];
 

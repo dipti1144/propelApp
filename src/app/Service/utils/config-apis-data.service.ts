@@ -15,12 +15,12 @@ private baseurl ="https://testnode.propelapps.com"
       
       
       this.getGLPeriods(isDeltaSync),
-      this.getlpnsforpack(isDeltaSync),
+      // this.getlpnsforpack(isDeltaSync),
       // this.getLPNsForUnPack(isDeltaSync),
       // this.getLPNsForSubInventoryTransfer(isDeltaSync),
       // this.getlpnsforwipcompletion(isDeltaSync),
       // this.getLPNsForPutAway(isDeltaSync),
-     
+      this.getSerial(isDeltaSync),
       // this.getLots(isDeltaSync),
       // this.getAccountAliases(isDeltaSync),
       
@@ -119,13 +119,22 @@ private baseurl ="https://testnode.propelapps.com"
 
  
 
-  private getLots(isDeltaSync:boolean){
-    const metadataUrl=getApiUrl("LotsMetadata")
-    const listUrl=getApiUrl("Lots")
-    const tableName="getLots";
+  // private getLots(isDeltaSync:boolean){
+  //   const metadataUrl="https://testnode.propelapps.com/EBS/20D/getLots/metadata"
+  //   const listUrl="https://testnode.propelapps.com/EBS/20D/getLots/7925/%22%22/%22Y%22"
+  //   const tableName="getLots";
 
-    return this.fetchApiDataService.retrieveDataFromApi(listUrl,metadataUrl,tableName,isDeltaSync,"getLots")
+  //   return this.fetchApiDataService.retrieveDataFromApi(listUrl,metadataUrl,tableName,isDeltaSync,"getLots")
 
+  // }
+  
+  private getSerial(isDeltaSync:boolean){
+    const metadataUrl=getApiUrl("SerialMetadata")
+    const listUrl=getApiUrl("Serial")
+    const tableName="getSerial"
+
+    return this.fetchApiDataService.retrieveDataFromApi(listUrl,metadataUrl,tableName,isDeltaSync,"getSerial")
+    
   }
 
   private getAccountAliases(isDeltaSync:boolean){

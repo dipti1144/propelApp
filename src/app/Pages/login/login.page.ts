@@ -23,6 +23,7 @@ export class LoginPage implements OnDestroy {
   loginForm: FormGroup;
   private destroy$ = new Subject<void>(); // Subject to trigger unsubscription
   userData: any[] = [];
+  orgId:any;
 
   constructor(
     private fb: FormBuilder,
@@ -78,11 +79,13 @@ export class LoginPage implements OnDestroy {
           async (res) => {
             await loading.dismiss();
             if (res.data[0].STATUS == 1) {
+
               const responsibilities = res.data.map(
                 (item: ResponseData) => item.RESPONSIBILITY
               );
 
               // Store the RESPONSIBILITY in Ionic Storage
+              this.orgId=res.data[0].DEFAULT_ORG_ID
               await this.storage.set('RESPONSIBILITY', responsibilities);
 
               await this.apiService.saveUserData(res.data);
@@ -116,7 +119,7 @@ export class LoginPage implements OnDestroy {
 
   async getOrganization() {
     const apiUrl =
-      'https://testnode.propelapps.com/EBS/20D/getInventoryOrganizations/7923';
+      `https://testnode.propelapps.com/EBS/20D/getInventoryOrganizations/${this.orgId}`;
     const metaData =
       'https://testnode.propelapps.com/EBS/20D/getInventoryOrganizations/metadata';
 

@@ -8,6 +8,7 @@ import { SyncApiDataService } from 'src/app/Service/utils/sync-api-data.service'
 import { ACTIVITY_CARDS } from './activity.constant';
 import { FetchApiDataService } from 'src/app/Service/utils/fetch-api-data.service';
 import { GlobalvariablesProvider } from 'src/app/constants/globalVariable';
+import { SqliteService } from 'src/app/Service/sqlite.service';
 // import _ from 'lodash';
 
 
@@ -46,6 +47,7 @@ export class ActivityPage implements OnInit {
     private apiservice: ApiServiceService,
     private syncApiDataService: SyncApiDataService,
     private router: Router,
+    private sqliteService:SqliteService,
     private fetchApisDataService:FetchApiDataService,
     private globalVariablesProvider:GlobalvariablesProvider
   ) { 
@@ -68,7 +70,8 @@ export class ActivityPage implements OnInit {
     this.responsibility = storageResponsibilities;
     const syncResp = await this.executeSync(storageResponsibilities, false);
     this.checkForErrors(syncResp);
-    this.loadResponsibilities();
+
+    await this.sqliteService.createTransactionHistoryTable("TransactionHistoryTable");
   }
 
   setCount(resp: string, count: number): void {
@@ -88,13 +91,7 @@ export class ActivityPage implements OnInit {
     }
   }
 
-  async loadResponsibilities(): Promise<void> {
-    const storageResponsibilities = await this.storage.get('responsibility');
-    console.log('Stored Responsibility:', this.responsibility);
-    this.responsibility = storageResponsibilities;
-    await this.executeSync(storageResponsibilities, false)
-
-  }
+  
 
   async executeSync(retriveArray: string[], isDeltaSync: boolean): Promise<void> {
   
@@ -156,6 +153,7 @@ export class ActivityPage implements OnInit {
 
   updateStatus(currentResult: any, retriveArray: string[], index: number, responsibility: string): void {
     const indx = this.findIndexByResp(responsibility);
+    console.log("current Result",currentResult)
     // console.log(responsibility)
     if (indx === -1) return;
     if (currentResult.status === true) {

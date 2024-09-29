@@ -18,14 +18,14 @@ private baseurl ="https://testnode.propelapps.com"
     
    
     this.getEmployees(isDeltaSync),
-    this.getDocForReceiving(isDeltaSync),
-    // this.getoperatingunits(isDeltaSync),
-    // this.getItemInstances(isDeltaSync),
-    // this.getItemInstanceStatuses(isDeltaSync),
+    
+    this.getoperatingunits(isDeltaSync),
+    this.getItemInstances(isDeltaSync),
+    this.getItemInstanceStatuses(isDeltaSync),
     // this.getItemInstanceAssets(isDeltaSync),
     
-    // this.getSubinventories(isDeltaSync),
-    // this.getLocators(isDeltaSync),
+    this.getSubinventories(isDeltaSync),
+    this.getLocators(isDeltaSync),
     // this.getRestrictedLocators(isDeltaSync),
    
     // this.getOnHandQuantities(isDeltaSync),
@@ -44,14 +44,7 @@ private baseurl ="https://testnode.propelapps.com"
   }
   
 
-  private getDocForReceiving(isDeltaSync:boolean){
-    const metadataUrl=getApiUrl("getDocForReceivingMetadata")
-    const listUrl=getApiUrl("getDocForReceiving")
-    const tableName="getDocForReceiving"
-    
-    return this.fetchApiDataService.retrieveDataFromApi(listUrl,metadataUrl,tableName,isDeltaSync,"getDocForReceiving")
-
-  }
+  
 
   // private getItems(isDeltaSync:boolean){
   //   const metadataUrl=getApiUrl("itemsMetadata")

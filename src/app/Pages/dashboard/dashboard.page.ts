@@ -33,6 +33,10 @@ export class DashboardPage implements OnInit {
     this.router.navigate(['/list']);
   }
 
+  gotoHistotyPage(){
+    this.router.navigate(["./transaction-history"])
+  }
+
   
 
 }

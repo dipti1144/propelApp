@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { SqliteService } from 'src/app/Service/sqlite.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NetworkService } from 'src/app/Service/network.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-organization',
@@ -19,25 +21,80 @@ export class OrganizationPage implements OnInit, OnDestroy {
   useDetails: any[] = [];
 
   private destroy$ = new Subject<void>();
+  private networkStatusSubscription!: Subscription;
   constructor(
     private apiService: ApiServiceService,
     private storage: Storage,
     private router: Router,
-    private sqliteService: SqliteService
+    private sqliteService: SqliteService,
+    private networkService: NetworkService
   ) {}
 
   async ngOnInit() {
     await this.storage.create();
-    this.getOrganization();
-    
+
+    this.getOrganizationFromDb();
+
+    console.log(this.displayedData);
   }
 
-  async getOrganization() {
+  // Fetch data from API if online
+  async getOrganizationFromApi() {
+    const apiUrl =
+      'https://testnode.propelapps.com/EBS/20D/getInventoryOrganizations/7923';
+    const metaData =
+      'https://testnode.propelapps.com/EBS/20D/getInventoryOrganizations/metadata';
+
+    try {
+      this.apiService
+        .getOrganizationApi(metaData)
+        .subscribe(async (resp: any) => {
+          const data = resp;
+
+          await this.sqliteService.createTableFromMetadata(
+            'Organizations',
+            data
+          );
+        });
+
+      this.apiService.getAll(apiUrl).subscribe(async (apiData: any) => {
+        const inventories = apiData?.ActiveInventories;
+
+        this.userData = inventories;
+        this.displayedData = [...this.userData];
+
+        if (inventories && inventories.length > 0) {
+          const db = await this.sqliteService.getDb();
+
+          if (db) {
+            const insertSuccess = await this.sqliteService.insertToTable(
+              'Organizations',
+              inventories,
+              db
+            );
+
+            if (insertSuccess) {
+              console.log('Data inserted successfully');
+            } else {
+              console.error('Data insertion failed');
+            }
+          } else {
+            console.error('Database object is not available');
+          }
+        } else {
+          console.warn('No inventories to insert');
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Fetch data from SQLite DB if offline
+  async getOrganizationFromDb() {
     try {
       const query = 'SELECT * FROM Organizations';
       const data = await this.sqliteService.getDataFromTable(query);
-
-      console.log('sql', data);
 
       this.userData = data;
 
@@ -45,6 +102,19 @@ export class OrganizationPage implements OnInit, OnDestroy {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  // Handle pull-down-to-refresh
+  async refreshOrganizations(event: any) {
+    const isOnline = await this.networkService.checkNetworkStatus();
+
+    if (isOnline) {
+      await this.getOrganizationFromApi(); // Refresh from API if online
+    } else {
+      await this.getOrganizationFromDb(); // Refresh from DB if offline
+    }
+
+    event.target.complete();
   }
 
   getFormattedName(name: string): string {
@@ -57,6 +127,11 @@ export class OrganizationPage implements OnInit, OnDestroy {
   }
 
   async selectOrganization(orgName: string, orgCOde: string): Promise<void> {
+    const details = this.displayedData.find(
+      (org) => org.InventoryOrgId === orgName
+    );
+    await this.storage.set('orgDetails', details);
+
     if (this.selectedOrganization === orgName) {
       this.selectedOrganization = '';
     } else {
@@ -73,19 +148,17 @@ export class OrganizationPage implements OnInit, OnDestroy {
     return this.selectedOrganization === orgName;
   }
 
-
   onSearchResults(results: any[]) {
-    console.log('Search Results Received:', results); // Debugging line
-    this.displayedData = results.length > 0 ? results : [...this.userData];
+    if (results.length > 0) {
+      this.displayedData = results;
+    } else {
+      console.log('Resetting to full userData:', this.userData);
+      this.displayedData = [...this.userData]; // Reset to full list if search is cleared
+    }
   }
   async confirmOrg(): Promise<void> {
     await this.getUserResponsibilities();
     this.router.navigate(['/activity']);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   async getUserResponsibilities(): Promise<string[]> {
@@ -101,11 +174,12 @@ export class OrganizationPage implements OnInit, OnDestroy {
       // masters
 
       'getEmployees',
+      'getSubinventories',
       'getoperatingunits',
       'getItemInstances',
       'getItemInstanceStatuses',
       'getItemInstanceAssets',
-      'getSubinventories',
+
       'getLocators',
       'getDocForReceiving',
       'getRestrictedSubInventories',
@@ -124,7 +198,7 @@ export class OrganizationPage implements OnInit, OnDestroy {
       'getLPNsForSubInventoryTransfer',
       'getlpnsforwipcompletion',
       'getLPNsForPutAway',
-      'getLots',
+      'getSerial',
       'getAccountAliases',
       'getReturnSerialTransactions',
       'getSerialDetails',
@@ -157,6 +231,15 @@ export class OrganizationPage implements OnInit, OnDestroy {
       'getWorkOrdersOperations',
     ];
 
-    return Array.from(new Set([...additionalResponsibilities]));
+    return additionalResponsibilities
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from network status updates to avoid memory leaks
+    if (this.networkStatusSubscription) {
+      this.networkStatusSubscription.unsubscribe();
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

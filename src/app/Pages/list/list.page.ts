@@ -10,21 +10,20 @@ import { SqliteService } from 'src/app/Service/sqlite.service';
   styleUrls: ['./list.page.scss'],
 })
 export class ListPage implements OnInit {
-  searchText: string = ''
+  searchText: string = '';
   cards: any[] = [];
   filteredCards: any[] = [];
   showCards: number = 10;
   list: any[] = [];
   isInfiniteScrollDisabled: boolean = false;
   isSearchVisible: boolean = false;
-  OrganizationCode: string = "";
-  
+  OrganizationCode: string = '';
 
   constructor(
     private apiService: ApiServiceService,
     private sqliteService: SqliteService,
     private storage: Storage,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,9 +40,7 @@ export class ListPage implements OnInit {
       const query = 'SELECT * FROM getDocForReceiving';
       const data = await this.sqliteService.getDataFromTable(query);
 
-
       // todo  fillter in query
-
       const poNumberMap = data.reduce((map, item) => {
         const poNumber = item.PoNumber;
         if (!map[poNumber]) {
@@ -63,6 +60,12 @@ export class ListPage implements OnInit {
     }
   }
 
+  refreshList(event: any) {
+    this.fetchDataFromSQLite().then(() => {
+      event.target.complete();
+    });
+  }
+
   loadData(event: any) {
     setTimeout(() => {
       this.showCards += 6;
@@ -79,62 +82,34 @@ export class ListPage implements OnInit {
     }, 500);
   }
 
-  onSearch(searchTerm: string) {
-    if (searchTerm && searchTerm.trim() !== '') {
-      this.filteredCards = this.cards.filter(card => card.PoNumber.toString().includes(searchTerm));
-    } else {
-      this.filteredCards = [...this.cards];
-    }
-
-    this.showCards = 6;
-    this.list = this.filteredCards.slice(0, this.showCards);
-    this.isInfiniteScrollDisabled = false;
-  }
-
   onSearchResults(results: any[]) {
     console.log('Search Results Received:', results);
     this.list = results.length > 0 ? results : [...this.cards];
-  }
-
-  onScanError(errorMessage: string) {
-    this.apiService.presentToast(errorMessage, "danger");
-  }
-
-  toggleSearch() {
-    this.isSearchVisible = !this.isSearchVisible;
-  }
-
-  clearSearch(event: any) {
-    event.detail.value = "";
-    this.fetchDataFromSQLite()
   }
 
   goToItemsPage(poNumber: string) {
     this.router.navigate(['/items', poNumber]);
   }
 
-  // async goToListDetails(item: any) {
-  //   await this.apiService.setValue('selectedItem', item);
-  //   this.navCtrl.navigateForward('/goods-receipt/item-details', {
-  //     queryParams: {
-  //       item
-  //     }
-  //   });
-  // }
- 
-  
-scan(event: any) {
-    if (event){
-      const item = this.list.find((item) => {
-        return (item.ItemNumber.toLowerCase() === event.toLowerCase())
-      })
-    //   if (item) {
-    //     this.goToItemDetails(item);
-    //   } else {
-    //     this.uiProviderService.presentToast(MESSAGES.ERROR, `Item ${event} not found`, Color.ERROR);
-    //   }
-    // } else {
-    //   this.uiProviderService.presentToast(MESSAGES.ERROR, `Scanner does not scan a value correctly`, Color.ERROR);
+  async scan(val: any) {  
+    console.log(val);
+    if (val) {
+      const query = `SELECT * FROM getDocForReceiving WHERE PoNumber = '${val}'`;
+      const data = await this.sqliteService.executeQueryData(query);
+      console.log(`Executing query fjjk: ${query}`);
+
+      console.log('datascanner', data);
+      if (data.rows.length > 0) {
+        this.goToItemsPage(`${val}`);
+      } else {
+        console.log('No data');
+        this.apiService.presentToast(`PO Number ${val} not found`, 'danger');
+      }
+    } else {
+      this.apiService.presentToast(
+        `Scanner does not scan a value correctly`,
+        'danger'
+      );
     }
   }
 }

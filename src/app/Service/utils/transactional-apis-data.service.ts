@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FetchApiDataService } from './fetch-api-data.service';
-import { urlConfig } from 'src/app/constants/app-settings';
+import { getApiUrl, urlConfig } from 'src/app/constants/app-settings';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,10 @@ private baseurl ="https://testnode.propelapps.com"
   syncTransactionalDataAPIs(isDeltaSync: boolean, responsibilities = []): any {
     const orgId = urlConfig.orgId;
     const promiseArray=[
-      this.getSalesOrdersForPicking(isDeltaSync,orgId),
-      this.getSalesOrdersForShipping(isDeltaSync,orgId),
-      // this.getLpnforSOPack(isDeltaSync,orgId),
+      // this.getSalesOrdersForPicking(isDeltaSync,orgId),
+      // this.getSalesOrdersForShipping(isDeltaSync,orgId),
+      this.getDocForReceiving(isDeltaSync),
+      this.getLpnforSOPack(isDeltaSync,orgId),
       // this.getShippingMethods(isDeltaSync,orgId),
      
       // this.getPurchaseOrdersForReceiving(isDeltaSync,orgId),
@@ -51,6 +52,14 @@ private baseurl ="https://testnode.propelapps.com"
 
 
   //*************** OUTBOUND *************//
+  private getDocForReceiving(isDeltaSync:boolean){
+    const metadataUrl=getApiUrl("getDocForReceivingMetadata")
+    const listUrl=getApiUrl("getDocForReceiving")
+    const tableName="getDocForReceiving"
+    
+    return this.fetchApiDataService.retrieveDataFromApi(listUrl,metadataUrl,tableName,isDeltaSync,"getDocForReceiving")
+
+  }
 
   private getSalesOrdersForPicking(isDeltaSync:boolean,orgId:any){
    

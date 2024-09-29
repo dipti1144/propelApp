@@ -5,7 +5,19 @@
    <!-- for network check -->
    <app-network-status></app-network-status>
 
+
+
       <app-search  [items]="displayedData" (searchResults)="onSearchResults($event)"></app-search>
+
+      <!-- Refresher Component -->
+  <ion-refresher slot="fixed" (ionRefresh)="refreshOrganizations($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      refreshingSpinner="crescent"
+      pullingText="Pull to refresh"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
 
       <ion-list *ngIf="displayedData && displayedData.length > 0" class="org-name-list">
         <ion-item class="orgItem" *ngFor="let item of displayedData" (click)="selectOrganization(item.InventoryOrgId, item.InventoryOrgCode)">

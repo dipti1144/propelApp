@@ -1,0 +1,26 @@
+<app-header [title]="'Transaction History'"></app-header>
+
+<ion-content [fullscreen]="true">
+  <ion-toolbar  >
+    <ion-card *ngFor="let transaction of data"
+    [ngClass]="{
+      'danger-card': transaction.status === 'E',
+      'success-card': transaction.status === 'S',
+      'default-card': transaction.status ==='local',
+    }"
+     >
+      <ion-card-header>
+        <ion-card-title>Po#{{ transaction.poNumber }}</ion-card-title>
+        <ion-card-subtitle>Item# {{ transaction.itemNumber }}</ion-card-subtitle>
+        <ion-card-subtitle>shipment#{{ transaction.shipLaneNum }}</ion-card-subtitle>
+      </ion-card-header>
+      
+        <ion-card-content>
+          <p *ngIf="transaction.receiptInfo">ReceiptNo: {{ transaction.receiptInfo }}</p>
+          <p *ngIf="transaction.error">Error: {{ transaction.error }}</p>
+          <p>Status: {{ transaction.status === 'local'? 'Local': transaction.status === 'S'? 'Success': 'Success'}}</p>
+        </ion-card-content>
+      
+    </ion-card>
+  </ion-toolbar>
+</ion-content>

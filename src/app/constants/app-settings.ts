@@ -2,6 +2,7 @@
 
 export const AppConfig = {
   API_EBS_BASEURL: 'https://testnode.propelapps.com/',
+
   API_EBS_0220: 'EBS/0220',
   API_EBS_20D: 'EBS/20D',
   API_EBS_22A: 'EBS/22A',
@@ -9,7 +10,9 @@ export const AppConfig = {
   API_EBS_22C: 'EBS/22C',
   API_EBS_23A: 'EBS/23A',
   API_SCM_0220: 'SCM/0220',
-  API_SCM_0820: 'SCM/0820'
+  API_SCM_0820: 'SCM/0820',
+
+  
 };
 
 
@@ -26,6 +29,8 @@ export function getApiUrl(key: keyof typeof URLS): string {
 const orgId = urlConfig.orgId;
 
 export const URLS = {
+
+
   
   
   get getDocForReceiving(): string {
@@ -274,7 +279,7 @@ export const URLS = {
   // },
 
   get Lots(): string {
-    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getLots/${orgId}/%22%22/%22Y%22`;
+    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getLots/${orgId}/""/"Y"`;
   },
 
   get LotsMetadata(): string {
@@ -320,6 +325,16 @@ export const URLS = {
   get SerialTransactionsMetadata(): string {
     return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_22C}/getSerialTransactions/metadata`;
   },
+
+  get Serial():string{
+    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getSerials/${orgId}/''/''`
+  },
+
+  get SerialMetadata():string{
+    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getSerials/metadata`
+  },
+
+  
 
 
 };
