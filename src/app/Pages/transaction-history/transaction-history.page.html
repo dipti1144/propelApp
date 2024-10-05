@@ -1,13 +1,13 @@
 <app-header [title]="'Transaction History'"></app-header>
 
 <ion-content [fullscreen]="true">
+  <ion-button expand="full" (click)="SyncAllData()">
+    <ion-icon slot="start" name="sync"></ion-icon>
+    Sync Data
+  </ion-button>
   <ion-toolbar  >
     <ion-card *ngFor="let transaction of data"
-    [ngClass]="{
-      'danger-card': transaction.status === 'E',
-      'success-card': transaction.status === 'S',
-      'default-card': transaction.status ==='local',
-    }"
+    
      >
       <ion-card-header>
         <ion-card-title>Po#{{ transaction.poNumber }}</ion-card-title>
@@ -15,11 +15,35 @@
         <ion-card-subtitle>shipment#{{ transaction.shipLaneNum }}</ion-card-subtitle>
       </ion-card-header>
       
+
         <ion-card-content>
           <p *ngIf="transaction.receiptInfo">ReceiptNo: {{ transaction.receiptInfo }}</p>
-          <p *ngIf="transaction.error">Error: {{ transaction.error }}</p>
-          <p>Status: {{ transaction.status === 'local'? 'Local': transaction.status === 'S'? 'Success': 'Success'}}</p>
+          <p 
+          *ngIf="transaction.error">Error: {{ transaction.error }}</p>
+          <p 
+          [ngClass]="{
+            'success-status': transaction.status === 'S',
+            'default-status': transaction.status === 'local'
+          }"
+          >Status: {{ transaction.status === 'local'? 'Local': transaction.status === 'S'? 'Success': 'Success'}}
+        </p>
+          <p 
+          *ngIf="transaction.status === 'E'"
+          
+  [ngClass]="{
+    'danger-status': transaction.status === 'E'
+  }"
+          >Status: {{ transaction.status === 'E'? 'Error':""}}</p>
+       
         </ion-card-content>
+        <ion-buttons
+        >
+        <ion-button 
+        
+         slot="end" (click)="deletetransaction(transaction.id)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        </ion-buttons>
       
     </ion-card>
   </ion-toolbar>

@@ -72,4 +72,9 @@ getOrganizationApi(url:any): Observable<any[]> {
 PostData(url: string, body: any) {
   return this.http.post(url, body);
 }
+
+PostDataHeaders(url: string, body: any, headers: any) {
+  return this.http.post(url, body, headers);
+}
+
 }

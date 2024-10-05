@@ -30,6 +30,13 @@ export const ACTIVITY_CARDS: any[] = [
   },
   {
     isLoading: undefined,
+    moduleTxt: 'getLot',
+    status: undefined,
+    count: 0,
+    responsibility: 'getLot',
+  },
+  {
+    isLoading: undefined,
     moduleTxt: 'getoperatingunits',
     status: undefined,
     count: 0,

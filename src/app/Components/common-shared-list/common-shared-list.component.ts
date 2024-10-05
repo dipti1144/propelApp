@@ -147,10 +147,6 @@ export class CommonSharedListComponent  implements OnInit {
         }
 
       }
-
-
-
-
         this.cdr.detectChanges();
       
     } catch (error) {

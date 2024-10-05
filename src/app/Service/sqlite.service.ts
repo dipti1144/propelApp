@@ -384,8 +384,8 @@ export class SqliteService {
       const res = await this.db?.executeSql(query, data);
       if (res) {
         console.log('Insert successful:', res);
-        console.log('Rows affected:', res.rowsAffected); // Check if any rows were affected
-        console.log('Insert ID:', res.insertId); // If there's an insert ID, it will be shown
+        console.log('Rows affected:', res.rowsAffected);
+        console.log('Insert ID:', res.insertId); 
       } else {
         console.error('Insert resulted in undefined response');
       }

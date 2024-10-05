@@ -307,6 +307,10 @@ export class DetailsPage implements OnInit, OnDestroy {
     const Payload = {
       poNumber: this.ItemDetail.PoNumber,
       titleName: 'Goods Receipt',
+      EmployeeId: this.useDetails?.PERSON_ID,
+      BusinessUnitId: this.orgDetails?.BusinessUnitId,
+      InventoryOrgId: this.orgDetails?.InventoryOrgId,
+      UserId: this.useDetails?.USER_ID,
       createdTime: new Date(),
       quantityReceived: this.QtyReceiving,
       error: '',

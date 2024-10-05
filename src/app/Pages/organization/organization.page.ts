@@ -199,6 +199,7 @@ export class OrganizationPage implements OnInit, OnDestroy {
       'getlpnsforwipcompletion',
       'getLPNsForPutAway',
       'getSerial',
+      'getLot',
       'getAccountAliases',
       'getReturnSerialTransactions',
       'getSerialDetails',

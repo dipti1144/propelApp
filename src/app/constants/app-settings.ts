@@ -34,7 +34,7 @@ export const URLS = {
   
   
   get getDocForReceiving(): string {
-    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getDocumentsForReceiving/7925/%22%22/%22%22`;
+    return `${AppConfig.API_EBS_BASEURL}${AppConfig.API_EBS_20D}/getDocumentsForReceiving/${orgId}/%22%22/%22%22`;
   },
 
   get getDocForReceivingMetadata(): string {

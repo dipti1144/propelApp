@@ -39,7 +39,8 @@ export class ListPage implements OnInit {
     try {
       const query = 'SELECT * FROM getDocForReceiving';
       const data = await this.sqliteService.getDataFromTable(query);
-
+     
+      console.log(data)
       // todo  fillter in query
       const poNumberMap = data.reduce((map, item) => {
         const poNumber = item.PoNumber;
